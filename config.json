@@ -1,0 +1,23 @@
+{
+    "sheet_name": "Sheet1",
+
+    "start_row": 2,
+
+    "case_status": "E",
+
+    "url_column": "J",
+
+    "completed_column": "K",
+
+   "directory_column": "N",
+
+    "filename_column": "O",
+
+    "user_data_dir": "zls_profile",
+
+    "headless": false,
+    
+    "unzipMove_batch": "./testSH.sh",
+    
+    "excel_file": "./input/testDisco.xlsx"
+}
