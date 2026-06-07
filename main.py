@@ -253,6 +253,9 @@ with sync_playwright() as p:
 
             downloaded_files = []
 
+            # =====================================================
+            # BEGIN DOWNLOAD LOOP
+            # =====================================================
             for i in range(download_count):
 
                 link = page.get_by_role(
@@ -262,62 +265,18 @@ with sync_playwright() as p:
 
                 href = link.get_attribute("href")
 
-                print(
-                    f"Link {i+1}/{download_count}"
-                )
-
-                print(
-                    f"HREF: {href}"
-                )
-
                 with page.expect_download(
                     timeout=120000
                 ) as download_info:
 
-                    print(
-                        f"Clicking link {i}"
-                    )
-
                     link.click()
 
-                print(
-                    f"Download event received {i}"
-                )
-
                 download = download_info.value
-
 
                 temp_path = download.path()
 
                 print(
                     f"Temp path: {temp_path}"
-                )
-
-                print(
-                    f"Exists: "
-                    f"{os.path.exists(temp_path)}"
-                )
-
-                print(
-                    f"Size: "
-                    f"{os.path.getsize(temp_path):,}"
-                )
-
-
-
-                print(
-                    f"Suggested filename: "
-                    f"{download.suggested_filename}"
-                )
-
-                print(
-                    f"Failure: "
-                    f"{download.failure()}"
-                )
-
-                input(
-                    "Inspect browser/download folder. "
-                    "Press ENTER to continue..."
                 )
 
                 filename = download.suggested_filename
@@ -333,24 +292,9 @@ with sync_playwright() as p:
 
                 download.save_as(save_path)
 
-                print(
-                    f"Saved: {save_path}"
-                )
-
-
-
             ws[f"{FILENAME_COLUMN}{row_number}"] = (
                 "; ".join(downloaded_files)
             )
-
-
-
-
-
-
-#===============================================================================
-
-#===============================================================================
 
             # =====================================================
             # WRITE CASE STATIUS TO "DOWNLOADED"
@@ -367,13 +311,11 @@ with sync_playwright() as p:
             # Save workbook immediately3
             wb.save(EXCEL_FILE)
 
-
             print(f"Updated Excel row {row_number}")
 
             # =====================================================
             # RECORD TIMER
             # =====================================================
-
             record_elapsed = time.time() - record_start
 
             print(
@@ -408,5 +350,3 @@ print(
     f"\nTotal Runtime: "
     f"{format_elapsed(total_elapsed)}"
 )
-
-#input("\nPress ENTER to close...")

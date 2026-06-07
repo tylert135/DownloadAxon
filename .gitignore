@@ -3,7 +3,7 @@ pycache/
 .venv/
 venv/
 browser/
-dist/
+
 build/
 output/
 zls_profile/
@@ -14,7 +14,7 @@ logs/
 ~$*.xlsx
 
 settings.json
-
+input/
 Callaway, Alicia Louise - 1500-2026/
 
 
