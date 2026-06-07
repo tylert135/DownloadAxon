@@ -13,8 +13,9 @@ logs/
 *.log
 ~$*.xlsx
 
-Callaway, Alicia Louise - 1500-2026
+settings.json
 
+Callaway, Alicia Louise - 1500-2026
 
 .env
 .env.*
