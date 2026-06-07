@@ -230,31 +230,25 @@ with sync_playwright() as p:
             # Small delay for stability
             page.wait_for_timeout(3000)
 
+
             # =====================================================
             # DOWNLOAD
             # =====================================================
 
-
-#===============================================================================
-
-
-
-
             download_links = page.get_by_role(
-                "link",
-                name="DOWNLOAD"
+            "link",
+            name="DOWNLOAD"
             )
 
             download_count = download_links.count()
 
             if download_count == 0:
-
                 raise Exception(
-                    f"No DOWNLOAD links found on {url}"
-                )
+                f"No DOWNLOAD links found on {url}"
+            )
 
             print(
-                f"Found {download_count} download link(s)"
+            f"Found {download_count} download link(s)"
             )
 
             downloaded_files = []
@@ -266,18 +260,65 @@ with sync_playwright() as p:
                     name="DOWNLOAD"
                 ).nth(i)
 
+                href = link.get_attribute("href")
+
                 print(
-                    f"HREF: "
-                    f"{link.get_attribute('href')}"
+                    f"Link {i+1}/{download_count}"
+                )
+
+                print(
+                    f"HREF: {href}"
                 )
 
                 with page.expect_download(
                     timeout=120000
                 ) as download_info:
 
+                    print(
+                        f"Clicking link {i}"
+                    )
+
                     link.click()
 
+                print(
+                    f"Download event received {i}"
+                )
+
                 download = download_info.value
+
+
+                temp_path = download.path()
+
+                print(
+                    f"Temp path: {temp_path}"
+                )
+
+                print(
+                    f"Exists: "
+                    f"{os.path.exists(temp_path)}"
+                )
+
+                print(
+                    f"Size: "
+                    f"{os.path.getsize(temp_path):,}"
+                )
+
+
+
+                print(
+                    f"Suggested filename: "
+                    f"{download.suggested_filename}"
+                )
+
+                print(
+                    f"Failure: "
+                    f"{download.failure()}"
+                )
+
+                input(
+                    "Inspect browser/download folder. "
+                    "Press ENTER to continue..."
+                )
 
                 filename = download.suggested_filename
 
@@ -286,49 +327,15 @@ with sync_playwright() as p:
                     filename
                 )
 
-                download.save_as(save_path)
-
-                downloaded_files.append(filename)
-
                 print(
-                    f"Downloaded "
-                    f"\033[30;43m{i+1}/{download_count}: \033[0m"
-                    f"{filename}"
+                    f"Saving to: {save_path}"
                 )
 
+                download.save_as(save_path)
 
-
-
-
-#===============================================================================
-            with page.expect_download(timeout=120000) as download_info:
-
-                page.get_by_role(
-                    "link",
-                    name="DOWNLOAD"
-                ).click()
-
-            download = download_info.value
-
-            # Get filename
-            filename = download.suggested_filename
-
-            print(f"Downloading: {filename}")
-
-            # Build full save path
-            save_path = os.path.join(
-                save_directory,
-                filename
-            )
-
-            # Save file
-            download.save_as(save_path)
-#===============================================================================
-
-
-#===============================================================================
-
-
+                print(
+                    f"Saved: {save_path}"
+                )
 
 
 
